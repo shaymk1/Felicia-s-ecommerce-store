@@ -1,0 +1,7 @@
+
+
+check if you click on a product name in cart, it does not take you to product detail
+
+check the i__contains in views store for category
+
+you cant increment a product in the cart and deleting gives you error too

@@ -29,9 +29,9 @@
 				<main class="col-md-6 border-left">
 
 
-        {% comment %} {% url 'add_cart' single_product.id %} {% endcomment %}
+        
 
-					<form action="" method="POST">
+					<form action="{% url 'add_cart' single_product.id %}" method="POST">
 						{% csrf_token %}
 						<article class="content-body">
 
@@ -54,7 +54,7 @@
 
 							<p>{{ single_product.description }}</p>
 
-{% comment %} 
+
 						 <hr>
 							<div class="row">
 								<div class="item-option-select">
@@ -67,6 +67,9 @@
 									</select>
 								</div>
 							</div>
+
+            
+
 							<div class="row">
 								<div class="item-option-select">
 									<h6>Select Size</h6>
@@ -78,15 +81,17 @@
 									</select>
 								</div>
 							</div>
-							<hr> {% endcomment %}
+							<hr> 
              
 
 
 							{% if single_product.stock <= 0 %}
 							<h5 class="text-danger">Out of Stock</h5>
 							{% else %}
-							<button type="submit" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fa fa-shopping-cart"></i> </button>
-							{% endif %}
+							      
+						  <button  button type="submit" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fa fa-shopping-cart"></i> </button>
+							
+					{% endif %}
 						</article> <!-- product-info-aside .// -->
 					</form>
 				</main> <!-- col.// -->
@@ -210,5 +215,26 @@
 	</div> <!-- container .//  -->
 </section> {% endcomment %}
 <!-- ========================= SECTION CONTENT END// ========================= -->
-
 {% endblock %}
+
+
+
+
+
+
+{% comment %} 
+
+	
+	 {% if in_cart %} 
+	 
+											  
+												 <a href="#" button type="submit" class="btn  btn-success"> <span class="text">Added to Cart</span> <i class="fa fa-check"></i> </a> 
+												 
+
+												
+												 <a href=" {% url 'cart' %} " button type="submit" class="btn  btn-outline-primary"> <span class="text">View Cart</span> <i class="fa fa-eye"></i> </a> 
+												  
+													 
+										
+										 {% else %} 
+										 {% endcomment %}
