@@ -1,25 +1,13 @@
-Collecting django==3.1
-  Downloading Django-3.1-py3-none-any.whl (7.8 MB)
-Collecting asgiref~=3.2.10
-  Using cached asgiref-3.2.10-py3-none-any.whl (19 kB)
-Requirement already satisfied: sqlparse>=0.2.2 in c:\users\hp\downloads\felicia's ecommerce store\darwin\lib\site-packages (from django==3.1) (0.4.1)
-Requirement already satisfied: pytz in c:\users\hp\downloads\felicia's ecommerce store\darwin\lib\site-packages (from django==3.1) (2021.1)
-Installing collected packages: asgiref, django
-  Attempting uninstall: asgiref
-    Found existing installation: asgiref 3.4.1
-    Uninstalling asgiref-3.4.1:
-      Successfully uninstalled asgiref-3.4.1
-  Attempting uninstall: django
-    Found existing installation: Django 3.2.5
-    Uninstalling Django-3.2.5:
-      Successfully uninstalled Django-3.2.5
-Successfully installed asgiref-3.2.10 django-3.1
-
-
+asgiref==3.4.1
 autopep8==1.5.7
-Django==3.1
+certifi==2021.5.30
+charset-normalizer==2.0.3
+Django==3.2.5
+idna==3.2
 Pillow==8.3.1
 pycodestyle==2.7.0
 pytz==2021.1
+requests==2.26.0
 sqlparse==0.4.1
 toml==0.10.2
+urllib3==1.26.6
