@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
@@ -20,6 +21,10 @@ media
 
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
+=======
+# Byte-compiled / optimized / DLL files
+__pycache__/
+1ddfe757f6cd36ab1ee7a575ddf9b7a0d7ba37f6
 *.py[cod]
 *$py.class
 
@@ -70,12 +75,25 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+<<<<<<< HEAD
 pytestdebug.log
 
 # Translations
 *.mo
 
 # Django stuff:
+=======
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+>>>>>>> 1ddfe757f6cd36ab1ee7a575ddf9b7a0d7ba37f6
 
 # Flask stuff:
 instance/
@@ -86,7 +104,10 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+<<<<<<< HEAD
 doc/_build/
+=======
+>>>>>>> 1ddfe757f6cd36ab1ee7a575ddf9b7a0d7ba37f6
 
 # PyBuilder
 target/
@@ -126,7 +147,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+<<<<<<< HEAD
 pythonenv*
+=======
+>>>>>>> 1ddfe757f6cd36ab1ee7a575ddf9b7a0d7ba37f6
 
 # Spyder project settings
 .spyderproject
@@ -145,6 +169,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+<<<<<<< HEAD
 
 # pytype static type analyzer
 .pytype/
@@ -158,3 +183,5 @@ dmypy.json
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+=======
+>>>>>>> 1ddfe757f6cd36ab1ee7a575ddf9b7a0d7ba37f6
