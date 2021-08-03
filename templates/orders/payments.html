@@ -17,7 +17,7 @@
 					<div class="card-body">
 						<p class="card-text mb-0">{{order.full_name}}</p>
 						<p class="card-text mb-0">{{order.full_address}}</p>
-						<p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
+						<p class="card-text mb-0">{{order.city}},{{order.province}}</p>
 						<p class="card-text mb-0">{{order.country}}</p>
 						<p class="card-text mb-0">{{order.email}}</p>
 						<p class="card-text mb-0">{{order.phone}}</p>
@@ -44,7 +44,6 @@
 									<th scope="col">Product</th>
 									<th scope="col" width="120">Quantity</th>
 									<th scope="col" width="120">Price</th>
-
 								</tr>
 							</thead>
 							<tbody>
@@ -72,8 +71,8 @@
 									</td>
 									<td>
 										<div class="price-wrap">
-											<var class="price">$ {{ cart_item.sub_total }}</var>
-											<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
+											<var class="price">R {{ cart_item.sub_total }}</var>
+											<small class="text-muted"> R {{ cart_item.product.price }} each </small>
 										</div> <!-- price-wrap .// -->
 									</td>
 
@@ -93,15 +92,15 @@
 					<div class="card-body">
 						<dl class="dlist-align">
 							<dt>Total price:</dt>
-							<dd class="text-right">$ {{total}}</dd>
+							<dd class="text-right">R {{total}}</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Tax:</dt>
-							<dd class="text-right"> $ {{vat}}</dd>
+							<dd class="text-right"> R {{vat}}</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Grand Total:</dt>
-							<dd class="text-right text-dark b"><strong>$ {{grand_total}}</strong></dd>
+							<dd class="text-right text-dark b"><strong>R {{grand_total}}</strong></dd>
 						</dl>
 						<hr>
 						<p class="text-center mb-3">
@@ -129,7 +128,9 @@
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 
+<!-- paypal .//  -->
 <script>
+
 
 	function getCookie(name) {
     let cookieValue = null;
@@ -152,8 +153,7 @@
 	var csrftoken = getCookie('csrftoken');
 	var orderID = "{{order.order_number}}"
 	var payment_method = 'PayPal'
-
-	//var redirect_url ="% url 'order_complete' %"
+	//var redirect_url = "% url 'order_complete' %"
 	// Render the PayPal button into #paypal-button-container
 	paypal.Buttons({
 
@@ -205,6 +205,8 @@
 
 
 	}).render('#paypal-button-container');
+
 </script>
+
 
 {% endblock %}

@@ -5,10 +5,6 @@
 
 {% block content %}
 
-<h2>yebo yes</h2>
-
-
-
 <section class="section-content padding-y bg">
 <div class="container">
 
@@ -19,7 +15,6 @@
 <div class="card">
   <div class="card-body">
     <h4 class="card-title mb-4">Billing Address</h4>
-    
     <form action="{% url 'place_order' %}" method="POST">
       {% csrf_token %}
       <div class="form-row">
@@ -59,7 +54,7 @@
         </div>
         <div class="col form-group">
           <label for="">Province</label>
-          <input type="text" name="state" class="form-control" required>
+          <input type="text" name="province" class="form-control" required>
         </div>
         <div class="col form-group">
           <label for="">Country</label>
@@ -114,8 +109,8 @@
       	</td>
       	<td>
       		<div class="price-wrap">
-      			<var class="price">$ {{ cart_item.sub_total }}</var>
-      			<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
+      			<var class="price">R {{ cart_item.sub_total }}</var>
+      			<small class="text-muted"> R {{ cart_item.product.price }} each </small>
       		</div> <!-- price-wrap .// -->
       	</td>
 
@@ -125,8 +120,11 @@
       </tbody>
       </table>
 
-      <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
-			<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+       <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button> 
+      	
+        {% comment %} <a href="{% url 'place_order' %}" class="btn btn-primary btn-block ">Place Order</a>  {% endcomment %}
+			
+        <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
       </form>
 		</div> <!-- card-body.// -->
 		</div> <!-- card.// -->
@@ -141,6 +139,5 @@
 
 </div> <!-- container .//  -->
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= --> 
-
+<!-- ========================= SECTION CONTENT END// ========================= -->
 {% endblock %}

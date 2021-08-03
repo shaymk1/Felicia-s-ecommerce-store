@@ -30,6 +30,9 @@
 <!-- custom javascript -->
 <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
 
+ <!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=ASaSvQ-09NvX-90gOHdDPvMkVSClH6TQYDTf_sM_McSMeLifyC5QWz9wx1eJt4wiMwZcxY0kNZVjYN2b&currency=USD"></script>
+
 <script type="text/javascript">
 /// some script
 
@@ -45,6 +48,20 @@ $(document).ready(function() {
 <body>
 
 {% include "store/nav.html" %}
+
+{% if messages %}
+
+    {% for message in messages %}
+    <div id="message" class="container">
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
+        {{ message }}
+    </div>
+    </div>
+    {% endfor %}
+
+{% endif %}
 
 
 {% block content %}
