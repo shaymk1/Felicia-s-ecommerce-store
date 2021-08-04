@@ -47,7 +47,7 @@
                             <div class="invoice-details mt25">
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
-                                        <li><strong>Order</strong> #{{order_number}}</li>
+                                        <li><strong>Order</strong> {{order_number}}</li>
                                         <li><strong>Transaction ID</strong> {{transID}}</li>
                                         <li><strong>Order Date:</strong> {{order.created_at}}</li>
                                         <li><strong>Status:</strong> {{payment.status}}</li>
@@ -78,23 +78,24 @@
                                           				</p>
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">${{item.product_price}} USD</td>
+                                                <td class="text-center">R{{item.product_price}} 
+                                                td>
                                             </tr>
                                           {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">R{{subtotal}} USD</th>
+                                                <th class="text-center">R{{subtotal}} </th>
                                             </tr>
                                             <tr>
                                                 <th colspan="2" class="text-right">VAT:</th>
-                                                <th class="text-center">R{{order.vat}} Rands</th>
+                                                <th class="text-center">R{{order.vat}} </th>
                                             </tr>
 
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">R{{order.order_total}} Rands</th>
+                                                <th class="text-center">R{{order.order_total}} </th>
                                             </tr>
                                         </tfoot>
                                     </table>

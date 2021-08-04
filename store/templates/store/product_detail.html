@@ -107,7 +107,7 @@
 
 
 
-				{% comment %} <form action="{% url 'submit_review' single_product.id %}" method="POST">
+				 <form action="{% url 'submit_review' single_product.id %}" method="POST">
 					{% csrf_token %}
 					<h5>Write Your Review</h5>
 
@@ -133,40 +133,44 @@
 						<br>
 						Review:
 						<textarea name="review" rows="4" class="form-control"></textarea>
-						<br> {% endcomment %}
+						<br> 
+             
 
+					
+					{% if user.is_authenticated %}
+							{% if orderproduct %}
+							 <input type="submit" value="Submit Review" class="btn btn-primary">
+						  {% else %} 
 
+							<br>
+								<p>You must purchase this product to post a review.</p> 
+							{% endif %}
 
+					{% else %}
+						  <p>You must be logged in to post a review. <span><a href="% url 'login' %">Login now</a></span></p>
+					{% endif %}  
 
+					<br>
+					<br>
 
-
-
-
-
-						<!-- % if user.is_authenticated %
-							% if orderproduct %
-								<input type="submit" value="Submit Review" class="btn btn-primary">
-							% else %
-								<p>You must purchase this product to post a review.</p>
-							% endif %
-						% else %
-						<p>You must be logged in to post a review. <span><a href="% url 'login' %">Login now</a></span></p>
-						% endif % -->
-{% comment %} 
-						{% if user.is_authenticated %}
+						{% comment %} {% if user.is_authenticated %}
 								<input type="submit" value="Submit Review" class="btn btn-primary">
 						{% else %}
 						<p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
-						{% endif %}
+						
 						<div class="alert alert-danger" role="alert" style="margin-top:10px;">
-  2-Factor Review Submission is disabled for demo purpose. {% endcomment %}
-</div>
+             {% endif %}  {% endcomment %}
+						<!-- 2-Factor Review Submission is disabled for demo purpose -->
+ 
+           </div>
+          
 
 					</div>
 
 				</form>
 <br>
-{% comment %} <header class="section-heading">
+<br>
+ <header class="section-heading">
 	<h3>Customer Reviews </h3>
 	<div class="rating-star">
 		<span>
@@ -179,8 +183,9 @@
 			</span>
 	</div>
 
-</header>
+</header> 
 
+<br>
 {% for review in reviews %}
 				<article class="box mb-3">
 					<div class="icontext w-100">
@@ -207,14 +212,14 @@
 					</div>
 				</article>
 {% endfor %}
-
+ 
 
 			</div> <!-- col.// -->
 		</div> <!-- row.// -->
 
 
 	</div> <!-- container .//  -->
-</section> {% endcomment %}
+</section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 {% endblock %}
 
@@ -223,19 +228,9 @@
 
 
 
-{% comment %} 
+
+
+
 
 	
-	 {% if in_cart %} 
 	 
-											  
-												 <a href="#" button type="submit" class="btn  btn-success"> <span class="text">Added to Cart</span> <i class="fa fa-check"></i> </a> 
-												 
-
-												
-												 <a href=" {% url 'cart' %} " button type="submit" class="btn  btn-outline-primary"> <span class="text">View Cart</span> <i class="fa fa-eye"></i> </a> 
-												  
-													 
-										
-										 {% else %} 
-										 {% endcomment %}
