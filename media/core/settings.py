@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from django.contrib.messages import constants as messages
 from pathlib import Path
+
+
+# from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
+    'category',
+    'accounts.apps.AccountsConfig',
+    # 'accounts',
+    'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +65,11 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
+        # 'DIRS': [
+        #     os.path.join(BASE_DIR, 'templates')
+
+        # ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,12 +77,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'category.context_processors.menu_links',
+                'carts.context_processors.counter',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
@@ -123,14 +140,40 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = BASE_DIR / 'media'
 
-STATICFILES_DIRS=[
+STATICFILES_DIRS = [
 
-    BASE_DIR , 'static'
+    BASE_DIR, 'static'
 ]
 
-MEDIA_ROOT = BASE_DIR/ 'media-files'
+MEDIA_ROOT = BASE_DIR / 'media-files'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+
+}
+
+# MESSAGE_TAGS = {
+#     messages.ERROR: 'danger',
+# }
+
+
+# SMTP configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '160362@virtualwindow.co.za'
+EMAIL_HOST_PASSWORD = 'melody1234'
+EMAIL_USE_TLS = True
+
+
+# EMAIL_HOST = config('EMAIL_HOST')
+# EMAIL_PORT = config('EMAIL_PORT', cast=int)
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)

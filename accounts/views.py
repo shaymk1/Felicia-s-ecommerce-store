@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
-from .forms import RegistrationForm  # , UserForm, UserProfileForm
-from .models import Account  # , UserProfile
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import RegistrationForm, UserForm, UserProfileForm
+from .models import Account, UserProfile
 from django.contrib import messages, auth
+from orders.models import Order, OrderProduct
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.contrib.auth import login, authenticate, logout
 
 # Verification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -17,8 +19,6 @@ from django.core.mail import EmailMessage
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
 import requests
-
-
 
 
 def register(request):
@@ -36,6 +36,12 @@ def register(request):
                 first_name=first_name, last_name=last_name, email=email, username=username, password=password)
             user.phone_number = phone_number
             user.save()
+
+            # Create a user profile
+            profile = UserProfile()
+            profile.user_id = user.id
+            profile.profile_picture = 'default/default-user.png'
+            profile.save()
 
             # USER ACTIVATION
             current_site = get_current_site(request)
@@ -94,12 +100,9 @@ def login(request):
                         ex_var_list.append(list(existing_variation))
                         id.append(item.id)
 
-
-                    #what is common between the product and ex var list:
+                    # what is common between the product and ex var list:
                     # product_variation = [1, 2, 3, 4, 6]
                     # ex_var_list = [4, 6, 3, 5] #existing variation list
-
-                    
 
                     for pr in product_variation:
                         if pr in ex_var_list:
@@ -107,19 +110,20 @@ def login(request):
                             item_id = id[index]
                             item = CartItem.objects.get(id=item_id)
                             item.quantity += 1
-                            item.user = user #assign the user to the cart item
+                            item.user = user  # assign the user to the cart item
                             item.save()
                         else:
                             cart_item = CartItem.objects.filter(cart=cart)
                             for item in cart_item:
                                 item.user = user
                                 item.save()
-                                    
+
             except:
                 pass
             auth.login(request, user)
             messages.success(request, 'You are now logged in.')
-            url = request.META.get('HTTP_REFERER') #http referer will grab the previous url where you came from
+            # http referer will grab the previous url where you came from
+            url = request.META.get('HTTP_REFERER')
             try:
                 query = requests.utils.urlparse(url).query
                 # next=/cart/checkout/
@@ -139,12 +143,18 @@ def login(request):
     #     item.save()
 
 
-@login_required(login_url= 'login')
+@login_required(login_url='login')
 def logout(request):
     auth.logout(request)
     messages.success(request, 'You are logged out.')
     return redirect('login')
 
+
+# @login_required(login_url= 'login')
+# def logout(request):
+#     logout(request)
+#     messages.success(request, 'User was logged out successfully!')
+#     return redirect('login')
 
 
 def activate(request, uidb64, token):
@@ -168,17 +178,18 @@ def activate(request, uidb64, token):
     return redirect('register')
 
 
-@login_required(login_url= 'login')
+@login_required(login_url='login')
 def dashboard(request):
-    # orders = Order.objects.order_by(
-    #     '-created_at').filter(user_id=request.user.id, is_ordered=True)
-    # orders_count = orders.count()
+    orders = Order.objects.order_by(
+        '-created_at').filter(user_id=request.user.id, is_ordered=True)
+    orders_count = orders.count()
 
-    # userprofile = UserProfile.objects.get(user_id=request.user.id)
-    # context = {
-    #     'orders_count': orders_count,
-    # }
-    return render(request, 'accounts/dashboard.html')#, context)
+    userprofile = UserProfile.objects.get(user_id=request.user.id)
+    context = {
+        'orders_count': orders_count,
+        'userprofile': userprofile,
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 
 def forgot_password(request):
@@ -200,16 +211,15 @@ def forgot_password(request):
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
 
-            
             messages.success(
                 request, 'Password reset email has been sent to your email address.')
             return redirect('login')
 
         else:
 
-                messages.error(request, 'Account does not exist!')
-                return redirect('forgot_password')
-    
+            messages.error(request, 'Account does not exist!')
+            return redirect('forgot_password')
+
     return render(request, 'accounts/forgot_password.html')
 
 
@@ -222,7 +232,7 @@ def resetpassword_validate(request, uidb64, token):
         user = None
 
     if user is not None and default_token_generator.check_token(user, token):
-        request.session['uid'] = uid #saving the uid from the session
+        request.session['uid'] = uid  # saving the uid from the session
         messages.success(request, 'Please reset your password')
         return redirect('reset_password')
     else:
@@ -236,78 +246,92 @@ def reset_password(request):
         confirm_password = request.POST['confirm_password']
 
         if password == confirm_password:
-            uid = request.session.get('uid') #getting the saved uid
+            uid = request.session.get('uid')  # getting the saved uid
             user = Account.objects.get(pk=uid)
-            user.set_password(password) #set_password save password in a hashed format
+            # set_password save password in a hashed format
+            user.set_password(password)
             user.save()
             messages.success(request, 'Password reset successful')
             return redirect('login')
         else:
             messages.error(request, 'Password do not match!')
             return redirect('resetPassword')
-    else:   
-         return render(request, 'accounts/reset_password.html')
+    else:
+        return render(request, 'accounts/reset_password.html')
 
 
-# def login(request):
-#     if request.method == 'POST':
-#         email = request.POST['email']
-#         password = request.POST['password']
+@login_required(login_url='login')
+def my_orders(request):
+    orders = Order.objects.filter(
+        user=request.user, is_ordered=True).order_by('-created_at')
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'accounts/my_orders.html', context)
 
-#         user = auth.authenticate(email=email, password=password)
 
-#         if user is not None:
-#             try:
-#                  try:
-#                 cart = Cart.objects.get(cart_id=_cart_id(request))
-#                 is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
-#                 if is_cart_item_exists:
-#                     cart_item = CartItem.objects.filter(cart=cart)
+@login_required(login_url='login')
+def edit_profile(request):
+    userprofile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('edit_profile')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'userprofile': userprofile,
+    }
+    return render(request, 'accounts/edit_profile.html', context)
 
-#                     # Getting the product variations by cart id
-#                     product_variation = []
-#                     for item in cart_item:
-#                         variation = item.variations.all()
-#                         product_variation.append(list(variation))
+#change password on the dashboard menu
+@login_required(login_url='login')
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
 
-#                     # Get the cart items from the user to access his product variations
-#                     cart_item = CartItem.objects.filter(user=user)
-#                     ex_var_list = []
-#                     id = []
-#                     for item in cart_item:
-#                         existing_variation = item.variations.all()
-#                         ex_var_list.append(list(existing_variation))
-#                         id.append(item.id)
+        user = Account.objects.get(username__exact=request.user.username)
 
-#                     # product_variation = [1, 2, 3, 4, 6]
-#                     # ex_var_list = [4, 6, 3, 5]
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                # auth.logout(request)
+                messages.success(request, 'Password updated successfully.')
+                return redirect('change_password')
+            else:
+                messages.error(request, 'Please enter valid current password')
+                return redirect('change_password')
+        else:
+            messages.error(request, 'Password does not match!')
+            return redirect('change_password')
 
-#                     for pr in product_variation:
-#                         if pr in ex_var_list:
-#                             index = ex_var_list.index(pr)
-#                             item_id = id[index]
-#                             item = CartItem.objects.get(id=item_id)
-#                             item.quantity += 1
-#                             item.user = user
-#                             item.save()
-#                         else:
-#                             cart_item = CartItem.objects.filter(cart=cart)
-#                             for item in cart_item:
-#                                 item.user = user
-#                                 item.save()
 
-#             except:
-#                     pass
+    return render(request, 'accounts/change_password.html')
 
-                
-#         auth.login(request, user)
-#         messages.success(request, 'You are now logged in!')
-#         return redirect('dashboard')
 
-#         else:
-#                 messages.error(request, 'Invalid login credentials!')
-#                 return redirect('login')
-#     context = {}
-#     return render(request, 'accounts/login.html', context)
+@login_required(login_url='login')
+def order_detail(request, order_id):
+    order_detail = OrderProduct.objects.filter(order__order_number=order_id)
+    order = Order.objects.get(order_number=order_id)
+    subtotal = 0
+    for i in order_detail:
+        subtotal += i.product_price * i.quantity
 
-    
+    context = {
+        'order_detail': order_detail,
+        'order': order,
+        'subtotal': subtotal,
+    }
+    return render(request, 'accounts/order_detail.html', context)

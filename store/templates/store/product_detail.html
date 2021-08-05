@@ -20,10 +20,10 @@
 					</article> <!-- gallery-wrap .end// -->
 					<ul class="thumb">
 						<li>
-							<a href="{{ single_product.images.url }}" target="mainImage"><img src="" alt="Product Image"></a>
-							{% comment %} {% for i in product_gallery %}
+							 <a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a> 
+							 {% for i in product_gallery %}
 							<a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
-							{% endfor %} {% endcomment %}
+							{% endfor %} 
 						</li>
 					</ul>
 				</aside>
@@ -153,6 +153,8 @@
 					<br>
 					<br>
 
+
+             	<!-- 2-Factor Review Submission is disabled for demo purpose -->
 						{% comment %} {% if user.is_authenticated %}
 								<input type="submit" value="Submit Review" class="btn btn-primary">
 						{% else %}
@@ -160,7 +162,7 @@
 						
 						<div class="alert alert-danger" role="alert" style="margin-top:10px;">
              {% endif %}  {% endcomment %}
-						<!-- 2-Factor Review Submission is disabled for demo purpose -->
+					
  
            </div>
           
