@@ -56,7 +56,8 @@ def register(request):
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            # messages.success(request, 'Thank you for registering, we have sent the link to your email address, please click on the link to verify your email!')
+            messages.success(
+                request, 'Thank you for registering, we have sent the link to your email address, please click on the link to verify your email!')
             # return redirect('login')
             return redirect('/accounts/login/?command=verification&email='+email)
 
@@ -137,10 +138,6 @@ def login(request):
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
     return render(request, 'accounts/login.html')
-
- # for item in cart_item:
-    #     item.user =user
-    #     item.save()
 
 
 @login_required(login_url='login')
@@ -292,7 +289,9 @@ def edit_profile(request):
     }
     return render(request, 'accounts/edit_profile.html', context)
 
-#change password on the dashboard menu
+# change password on the dashboard menu
+
+
 @login_required(login_url='login')
 def change_password(request):
     if request.method == 'POST':
@@ -316,7 +315,6 @@ def change_password(request):
         else:
             messages.error(request, 'Password does not match!')
             return redirect('change_password')
-
 
     return render(request, 'accounts/change_password.html')
 
